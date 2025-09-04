@@ -22,6 +22,30 @@ Poké Scraper est un script Python conçu pour collecter les images de Pokémon 
   - Stocke les images sous le préfixe `images/`  
   - Les objets sont accessibles publiquement via URL
 
+### Schéma d'architecture : 
+
+
+```ASCII
+   +----------------+
+   |  Bulbapedia    |
+   |  (Web source)  |
+   +------+---------+
+          |
+          v
+   +----------------+
+   |   EC2 Scraper  |
+   |  (Python code) |
+   +------+---------+
+          |
+          v
+   +----------------+
+   |   S3 Bucket    |
+   |  pokescraper   |
+   |   images/...   |
+   +----------------+
+
+```
+
 ### Flux de données
 
 - L’EC2 récupère la page listant tous les Pokémon sur Bulbapedia
