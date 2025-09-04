@@ -1,15 +1,23 @@
-Poké Scraper – Rapport de projet
+Poké Scraper
+Description
+
+Poké Scraper est un script Python conçu pour collecter les images de Pokémon depuis Bulbapedia et les stocker dans un bucket Amazon S3. Le projet est exécuté sur une instance EC2 et utilise des bonnes pratiques de sécurité et de robustesse, notamment en évitant le stockage de clés AWS dans le code.
 
 Objectif
-Développer un scraper Python exécuté sur AWS EC2 pour collecter les images de Pokémon depuis Bulbapedia et les stocker dans un bucket S3, en respectant les bonnes pratiques de sécurité et de robustesse.
 
-Architecture mise en place
+Scraper automatiquement les images de tous les Pokémon.
+
+Stocker les images dans un bucket S3 avec un accès public.
+
+Garantir la sécurité et la fiabilité du processus via IAM Roles et gestion d’erreurs.
+
+Architecture
 
 EC2 Instance (Amazon Linux 2) : exécute le script Python.
 
-IAM Role : associé à l’EC2 pour autoriser uniquement l’accès au bucket S3 sans stocker de clés AWS dans le code.
+IAM Role : attaché à l’EC2 pour autoriser uniquement l’accès au bucket S3, sans clés AWS en dur.
 
-S3 Bucket : stockage des images, organisées sous le préfixe images/. Les objets sont publics pour visualisation directe via URL.
+S3 Bucket : stocke les images sous le préfixe images/. Les objets sont accessibles publiquement via URL.
 
 Flux de données
 
@@ -23,21 +31,48 @@ Upload direct dans le bucket S3 via boto3.
 
 Choix techniques
 
-Python 3 : pour le scraping et la manipulation HTTP.
+Python 3 : traitement HTTP et manipulation des données.
 
 BeautifulSoup4 + requests : extraction HTML et téléchargement sécurisé.
 
 Boto3 : interface avec AWS S3.
 
-IAM Role + policies limitées : sécurité maximale, pas de clés en dur.
+IAM Role + policies limitées : sécurité maximale sans stocker de clés dans le code.
 
-Gestion des erreurs réseau et images manquantes via try/except.
+Gestion des erreurs : try/except pour les problèmes réseau ou images manquantes.
 
-Respect des délais (time.sleep) pour ne pas surcharger Bulbapedia.
+Respect des délais : time.sleep() pour éviter de surcharger Bulbapedia.
+
+Installation
+
+Cloner le repository :
+
+git clone <URL_DU_REPO>
+cd poké-scraper
+
+
+Installer les dépendances :
+
+pip install -r requirements.txt
+
+
+Configurer l’instance EC2 avec un IAM Role ayant accès au bucket S3.
+
+Utilisation
+python poke_scraper.py
+
+
+Le script :
+
+Scrape les images depuis Bulbapedia.
+
+Télécharge et envoie les images vers le bucket S3.
+
+Log chaque étape pour vérification.
 
 Résultats et tests
 
-Test de 5 Pokémon initialement, puis extension à l’ensemble du Pokédex.
+Test initial sur 5 Pokémon puis extension à l’ensemble du Pokédex.
 
 Vérification que les fichiers sont bien présents dans S3 et accessibles via URL publique.
 
